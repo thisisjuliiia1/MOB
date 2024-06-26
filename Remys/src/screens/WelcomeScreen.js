@@ -1,21 +1,24 @@
-import { Text, View, StyleSheet, Image } from 'react-native';
-import React from 'react';
-import { TailwindProvider } from 'tailwindcss-react-native';
-import { StatusBar } from 'expo-status-bar';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import Animated, { useSharedValue, withSpring } from 'react-native-reanimated';
+import React, {useEffect} from 'react';
+import { View, Image, StatusBar } from 'react-native';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import {useNavigation} from "@react-navigation/native";
 
 export default function WelcomeScreen() {
+
+    const navigation = useNavigation();
+
+    useEffect(() => {
+        setTimeout(() => {
+            navigation.navigate('Home');
+        }, 2500);
+    }, []);
+
     return (
-        <TailwindProvider>
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#394e7d' }}>
-                <StatusBar style="light" />
-                <View style={{ width: wp('60%'), height: wp('60%'), borderRadius: wp('40%'), backgroundColor: 'rgba(255, 255, 255, 0.2)', justifyContent: 'center', alignItems: 'center', padding: wp('5%') }}>
-                    <View style={{ width: wp('62%'), height: wp('62%'), borderRadius: wp('36%'), backgroundColor: 'rgba(255, 255, 255, 0.2)', justifyContent: 'center', alignItems: 'center', padding: wp('5%') }}>
-                        <Image source={require('../../assets/images/logo.png')} style={{ width: wp('60%'), height: wp('60%'), borderRadius: wp('30%') }} />
-                    </View>
-                </View>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#394e7d' }}>
+            <StatusBar style="dark" />
+            <View style={{ width: wp('60%'), height: wp('60%'), borderRadius: wp('30%'), backgroundColor: 'rgba(255, 255, 255, 0.2)', justifyContent: 'center', alignItems: 'center', padding: wp('5%') }}>
+                <Image source={require('../../assets/images/logo.png')} style={{ width: '100%', height: '100%', borderRadius: wp('30%') }} resizeMode="cover" />
             </View>
-        </TailwindProvider>
+        </View>
     );
 }
