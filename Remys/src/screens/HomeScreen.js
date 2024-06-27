@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Text, Image, TextInput } from 'react-native';
 import Categories from "../components/categories";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -6,6 +6,20 @@ import axios from 'axios';
 
 export default function HomeScreen() {
     const [activeCategory, setActiveCategory] = useState('Beef'); // Beispielwert für activeCategory
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get('https://www.themealdb.com/api/json/v1/1/categories.php');
+                setCategories(response.data.categories);
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+            }
+        };
+
+        fetchCategories();
+    }, []);
 
     return (
         <View style={{ flex: 1, backgroundColor: '#dfecee' }}>
@@ -37,7 +51,7 @@ export default function HomeScreen() {
 
                 {/* Kategorien */}
                 <View style={{ marginTop: 20 }}>
-                    <Categories activeCategory={activeCategory} setActiveCategory={setActiveCategory} />
+                    <Categories activeCategory={activeCategory} setActiveCategory={setActiveCategory} categories={categories} />
                 </View>
             </ScrollView>
         </View>
