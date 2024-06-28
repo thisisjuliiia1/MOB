@@ -35,15 +35,15 @@ export default function HomeScreen() {
 
                 {/* Begrüßungstexte */}
                 <View style={{ marginLeft: 20, marginTop: 10 }}>
-                    <Text style={{ fontWeight: '400', color: '#282221', fontSize: wp('4%'), marginBottom: 10 }}>Hallo Julia!</Text>
-                    <Text style={{ fontWeight: '600', color: '#282221', fontSize: wp('6%') }}>Finde hier deine Rezepte!</Text>
+                    <Text style={{ fontWeight: '400', color: '#282221', fontSize: wp('4%'), marginBottom: 10 }}>Hello Julia!</Text>
+                    <Text style={{ fontWeight: '600', color: '#282221', fontSize: wp('6%') }}>Find here your Recipes!</Text>
                 </View>
 
                 {/* Searchbar */}
                 <View style={{ marginHorizontal: 20, marginTop: 20, flexDirection: 'row', alignItems: 'center', backgroundColor: '#282221', paddingVertical: 10, paddingHorizontal: 15, borderRadius: 9999, width: '70%' }}>
                     <Image source={require('../../assets/icons/Lupe.png')} style={{ height: hp(2), width: hp(2), marginRight: 10 }} />
                     <TextInput
-                        placeholder="Suche nach Rezepten"
+                        placeholder="Search for Recipes"
                         placeholderTextColor="#fff"
                         style={{ color: '#ffffff', flex: 1 }}
                     />
