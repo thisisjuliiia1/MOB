@@ -1,25 +1,58 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, Text, Image, TextInput } from 'react-native';
-import Categories from "../components/categories";
+import { View, ScrollView, Text, Image, TextInput, ActivityIndicator } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import axios from 'axios';
+import Categories from "../components/categories";
+import Recipes from "../components/recipes";
 
 export default function HomeScreen() {
-    const [activeCategory, setActiveCategory] = useState('Beef'); // Beispielwert für activeCategory
+    const [activeCategory, setActiveCategory] = useState('Beef');
     const [categories, setCategories] = useState([]);
+    const [meals, setMeals] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const response = await axios.get('https://www.themealdb.com/api/json/v1/1/categories.php');
-                setCategories(response.data.categories);
-            } catch (error) {
-                console.error('Error fetching categories:', error);
-            }
-        };
-
-        fetchCategories();
+        getCategories();
+        getRecipes(activeCategory);
     }, []);
+
+    const handleChangeCategory = (category) => {
+        getRecipes(category);
+        setActiveCategory(category);
+        setMeals([]);
+    }
+
+    const getCategories = async () => {
+        try {
+            const response = await axios.get('https://www.themealdb.com/api/json/v1/1/categories.php');
+            if (response && response.data) {
+                setCategories(response.data.categories);
+            }
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+        }
+    }
+
+    const getRecipes = async (category = 'Beef') => {
+        try {
+            const response = await axios.get(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`);
+            if (response && response.data) {
+                setMeals(response.data.meals || []);
+                setIsLoading(false);
+            }
+        } catch (error) {
+            console.error('Error fetching recipes:', error);
+            setIsLoading(false);
+        }
+    }
+
+    if (isLoading) {
+        return (
+            <View>
+                <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+        );
+    }
 
     return (
         <View style={{ flex: 1, backgroundColor: '#dfecee' }}>
@@ -51,7 +84,19 @@ export default function HomeScreen() {
 
                 {/* Kategorien */}
                 <View style={{ marginTop: 20 }}>
-                    <Categories activeCategory={activeCategory} setActiveCategory={setActiveCategory} categories={categories} />
+                    {categories.length > 0 && (
+                        <Categories
+                            categories={categories}
+                            activeCategory={activeCategory}
+                            handleChangeCategory={handleChangeCategory}
+                        />
+                    )}
+                </View>
+
+
+                {/* Rezepte */}
+                <View>
+                    <Recipes meals={meals} categories={categories} />
                 </View>
             </ScrollView>
         </View>
