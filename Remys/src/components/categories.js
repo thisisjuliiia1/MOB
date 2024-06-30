@@ -27,20 +27,15 @@ export default function Categories({ categories, activeCategory, handleChangeCat
                                     { backgroundColor }
                                 ]}
                             >
-                                <View style={{ width: size, height: size, borderRadius: 999, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' }}>
-                                    {/*<Image
-                                        source={{ uri: category.strCategoryThumb }}
-                                        style={{ width: '100%', height: '100%', borderRadius: 999 }}
-                                        resizeMode="cover"
-                                    />*/}
+                                <View style={{ width: size, height: size, borderRadius: 100, alignItems: 'center', justifyContent: 'center' }}>
                                     <CachedImage
                                         uri={category.strCategoryThumb }
-                                        style={{ width: '100%', height: '100%', borderRadius: 999 }}
+                                        style={{ width: '100%', height: '100%', borderRadius: 100 }}
                                         resizeMode="cover"
                                     />
                                 </View>
                             </Pressable>
-                            <Text style={{ marginTop: 5, textAlign: 'center', color: isActive ? '#282221' : '#282221', fontWeight: '600' }}>{category.strCategory}</Text>
+                            <Text style={{ marginTop: 5, textAlign: 'center', color: '#282221', fontWeight: '600' }}>{category.strCategory}</Text>
                         </View>
                     );
                 })}

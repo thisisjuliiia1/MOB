@@ -1,26 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { View, ScrollView, Text, Image, TextInput, ActivityIndicator } from 'react-native';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import axios from 'axios';
 import Categories from "../components/categories";
 import Recipes from "../components/recipes";
+import styles from './HomeScreenStyles'; // Importieren Sie das StyleSheet
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) { // Passen Sie die Navigation als Prop an
     const [activeCategory, setActiveCategory] = useState('Beef');
     const [categories, setCategories] = useState([]);
     const [meals, setMeals] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         getCategories();
         getRecipes(activeCategory);
     }, []);
 
-    const handleChangeCategory = (category) => {
-        getRecipes(category);
+    useEffect(() => {
+        if (activeCategory) {
+            getRecipes(activeCategory);
+        }
+    }, [activeCategory]);
+
+    const handleChangeCategory = useCallback((category) => {
         setActiveCategory(category);
-        setMeals([]);
-    }
+        setSearchTerm('');
+        getRecipes(category);
+    }, []);
 
     const getCategories = async () => {
         try {
@@ -31,54 +38,57 @@ export default function HomeScreen() {
         } catch (error) {
             console.error('Error fetching categories:', error);
         }
-    }
+    };
 
-    const getRecipes = async (category = 'Beef') => {
+    const getRecipes = async (category) => {
+        setIsLoading(true);
         try {
             const response = await axios.get(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`);
             if (response && response.data) {
                 setMeals(response.data.meals || []);
-                setIsLoading(false);
             }
         } catch (error) {
             console.error('Error fetching recipes:', error);
+        } finally {
             setIsLoading(false);
         }
-    }
+    };
 
-    if (isLoading) {
-        return (
-            <View>
-                <ActivityIndicator size="large" color="#0000ff" />
-            </View>
+    const handleSearch = useCallback((text) => {
+        setSearchTerm(text);
+    }, []);
+
+    const filteredMeals = useMemo(() => {
+        if (!searchTerm) {
+            return meals;
+        }
+        return meals.filter(meal =>
+            meal.strMeal.toLowerCase().includes(searchTerm.toLowerCase())
         );
-    }
+    }, [searchTerm, meals]);
 
     return (
-        <View style={{ flex: 1, backgroundColor: '#dfecee' }}>
+        <View style={styles.container}>
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom: 50 }}
-                style={{ paddingTop: 14 }}
+                style={styles.scrollView}
             >
-                {/* Logo */}
-                <View style={{ marginLeft: 20, marginTop: 55 }}>
-                    <Image source={require('../../assets/images/logo.png')} style={{ height: hp(7), width: hp(7) }} />
-                </View>
-
                 {/* Begrüßungstexte */}
-                <View style={{ marginLeft: 20, marginTop: 10 }}>
-                    <Text style={{ fontWeight: '400', color: '#282221', fontSize: wp('4%'), marginBottom: 10 }}>Hello Julia!</Text>
-                    <Text style={{ fontWeight: '600', color: '#282221', fontSize: wp('6%') }}>Find here your Recipes!</Text>
+                <View style={styles.greetingText}>
+                    <Text style={styles.greetingText}>Hello Julia!</Text>
+                    <Text style={styles.mainText}>Find here your Recipes!</Text>
                 </View>
 
                 {/* Searchbar */}
-                <View style={{ marginHorizontal: 20, marginTop: 20, flexDirection: 'row', alignItems: 'center', backgroundColor: '#282221', paddingVertical: 10, paddingHorizontal: 15, borderRadius: 9999, width: '70%' }}>
-                    <Image source={require('../../assets/icons/Lupe.png')} style={{ height: hp(2), width: hp(2), marginRight: 10 }} />
+                <View style={styles.searchBarContainer}>
+                    <Image source={require('../../assets/icons/Lupe.png')} style={styles.searchIcon} />
                     <TextInput
                         placeholder="Search for Recipes"
                         placeholderTextColor="#fff"
-                        style={{ color: '#ffffff', flex: 1 }}
+                        style={styles.searchInput}
+                        onChangeText={handleSearch}
+                        value={searchTerm}
                     />
                 </View>
 
@@ -93,10 +103,13 @@ export default function HomeScreen() {
                     )}
                 </View>
 
-
                 {/* Rezepte */}
                 <View>
-                    <Recipes meals={meals} categories={categories} />
+                    {isLoading ? (
+                        <ActivityIndicator size="large" />
+                    ) : (
+                        <Recipes meals={filteredMeals} />
+                    )}
                 </View>
             </ScrollView>
         </View>
