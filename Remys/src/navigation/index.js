@@ -9,6 +9,8 @@ import HomeScreen from '../screens/HomeScreen.js';
 import RecipeDetailScreen from '../screens/RecipeDetailScreen.js';
 import LikedRecipesScreen from '../screens/LikedRecipesScreen.js';
 import WelcomeScreen from '../screens/WelcomeScreen.js'; // Adjust the path as per your project structure
+import { LikedRecipesProvider } from '../context/LikedRecipesContext'; // Adjust the path as per your project structure
+
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -52,6 +54,7 @@ function HomeTabNavigator() {
 export default function App() {
     return (
         <NavigationContainer>
+            <LikedRecipesProvider>
             <Stack.Navigator initialRouteName="Welcome">
 
                 <Stack.Screen
@@ -112,6 +115,7 @@ export default function App() {
                 />
 
             </Stack.Navigator>
+            </LikedRecipesProvider>
         </NavigationContainer>
     );
 }

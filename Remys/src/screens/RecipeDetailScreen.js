@@ -18,6 +18,7 @@ import styles from './RecipeDetailStyles'; // Import the StyleSheet
 const RecipeDetailScreen = (props) => {
     const { item } = props.route.params;
     const [isFavourite, setIsFavourite] = useState(false);
+    const [likedRecipes, setLikedRecipes] = useState([]); // New state for liked recipes
     const navigation = useNavigation();
     const [meal, setMeal] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -40,6 +41,7 @@ const RecipeDetailScreen = (props) => {
             setLoading(false);
         }
     };
+
 
     const renderIngredients = () => {
         if (!meal) return null; // Return early if meal is not loaded
@@ -131,6 +133,7 @@ const RecipeDetailScreen = (props) => {
                     </View>
                 </View>
             )}
+
         </ScrollView>
     );
 };

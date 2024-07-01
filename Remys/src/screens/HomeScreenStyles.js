@@ -46,6 +46,21 @@ const styles = StyleSheet.create({
         color: '#dfecee',
         flex: 1,
     },
+    likedRecipesButtonContainer: {
+        marginTop: 20,
+        alignItems: 'center',
+    },
+    likedRecipesButton: {
+        backgroundColor: '#394e7d',
+        borderRadius: 8,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+    },
+    likedRecipesButtonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
 });
 
 export default styles;

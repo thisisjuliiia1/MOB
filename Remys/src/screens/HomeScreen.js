@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, {useState, useEffect, useCallback, useMemo, useContext} from 'react';
 import { View, ScrollView, Text, Image, TextInput, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import Categories from "../components/categories";
 import Recipes from "../components/recipes";
 import styles from './HomeScreenStyles'; // Importieren Sie das StyleSheet
+import {LikedRecipesContext} from "../context/LikedRecipesContext";
 
 export default function HomeScreen({ navigation }) { // Passen Sie die Navigation als Prop an
     const [activeCategory, setActiveCategory] = useState('Beef');
@@ -11,6 +12,8 @@ export default function HomeScreen({ navigation }) { // Passen Sie die Navigatio
     const [meals, setMeals] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const { likedRecipes, toggleLikeRecipe} = useContext(LikedRecipesContext); // Zugriff auf den Context und die toggleLikeRecipe Funktion
+
 
     useEffect(() => {
         getCategories();
@@ -58,6 +61,10 @@ export default function HomeScreen({ navigation }) { // Passen Sie die Navigatio
         setSearchTerm(text);
     }, []);
 
+    const handleLikeRecipe = useCallback((recipe) => {
+        toggleLikeRecipe(recipe); // Funktion zum Hinzufügen oder Entfernen eines Rezepts aus den gelikten Rezepten
+    }, [toggleLikeRecipe]);
+
     const filteredMeals = useMemo(() => {
         if (!searchTerm) {
             return meals;
@@ -77,7 +84,7 @@ export default function HomeScreen({ navigation }) { // Passen Sie die Navigatio
                 {/* Begrüßungstexte */}
                 <View style={styles.greetingText}>
                     <Text style={styles.greetingText}>Hello Julia!</Text>
-                    <Text style={styles.mainText}>Find here your Recipes!</Text>
+                    <Text style={styles.mainText}>Find your Recipes here!</Text>
                 </View>
 
                 {/* Searchbar */}
@@ -90,6 +97,8 @@ export default function HomeScreen({ navigation }) { // Passen Sie die Navigatio
                         onChangeText={handleSearch}
                         value={searchTerm}
                     />
+
+
                 </View>
 
                 {/* Kategorien */}
@@ -110,6 +119,30 @@ export default function HomeScreen({ navigation }) { // Passen Sie die Navigatio
                     ) : (
                         <Recipes meals={filteredMeals} />
                     )}
+
+                </View>
+
+                {/* Rezepte anzeigen */}
+                <View>
+                    {isLoading ? (
+                        <ActivityIndicator size="large" />
+                    ) : (
+                        <Recipes
+                            meals={filteredMeals}
+                            onLikeRecipe={handleLikeRecipe} // Funktion zum Liken oder Entliken eines Rezepts übergeben
+                        />
+                    )}
+
+                </View>
+
+                {/* Liked Recipes Button */}
+                <View style={styles.likedRecipesButtonContainer}>
+                    <TouchableOpacity
+                        style={styles.likedRecipesButton}
+                        onPress={() => navigation.navigate('LikedRecipes')}
+                    >
+                        <Text style={styles.likedRecipesButtonText}>View Liked Recipes</Text>
+                    </TouchableOpacity>
                 </View>
             </ScrollView>
         </View>
