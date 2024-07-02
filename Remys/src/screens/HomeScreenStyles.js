@@ -9,9 +9,6 @@ const styles = StyleSheet.create({
     scrollView: {
         paddingTop: 14,
     },
-    logoContainer: {
-        marginLeft: 20,
-    },
 
     greetingText: {
         marginLeft: 10,
