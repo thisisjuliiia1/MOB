@@ -4,8 +4,9 @@ import { LikedRecipesContext } from '../context/LikedRecipesContext';
 import { useNavigation } from '@react-navigation/native';
 
 const LikedRecipesScreen = () => {
-    const { likedRecipes } = useContext(LikedRecipesContext); // Zugriff auf den Context und die gelikten Rezepte
+    const { likedRecipes } = useContext(LikedRecipesContext);
     const navigation = useNavigation();
+
 
     return (
         <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 50 }}>

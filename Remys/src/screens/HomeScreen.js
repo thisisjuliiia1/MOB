@@ -1,23 +1,25 @@
-import React, {useState, useEffect, useCallback, useMemo, useContext} from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useContext } from 'react';
 import { View, ScrollView, Text, Image, TextInput, ActivityIndicator } from 'react-native';
 import axios from 'axios';
-import Categories from "../components/categories";
-import Recipes from "../components/recipes";
-import styles from './HomeScreenStyles'; // Importieren Sie das StyleSheet
-import {LikedRecipesContext} from "../context/LikedRecipesContext";
+import Categories from '../components/categories';
+import Recipes from '../components/recipes';
+import styles from './HomeScreenStyles'; // Import the StyleSheet
+import { LikedRecipesContext } from '../context/LikedRecipesContext';
 
-export default function HomeScreen({ navigation }) { // Passen Sie die Navigation als Prop an
+export default function HomeScreen({ navigation }) {
     const [activeCategory, setActiveCategory] = useState('Beef');
     const [categories, setCategories] = useState([]);
     const [meals, setMeals] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    const { likedRecipes, toggleLikeRecipe} = useContext(LikedRecipesContext); // Zugriff auf den Context und die toggleLikeRecipe Funktion
-
+    const { likedRecipes, toggleLikeRecipe } = useContext(LikedRecipesContext);
 
     useEffect(() => {
-        getCategories();
-        getRecipes(activeCategory);
+        const initializeScreen = async () => {
+            await getCategories();
+            await getRecipes('Beef');
+        };
+        initializeScreen();
     }, []);
 
     useEffect(() => {
@@ -62,7 +64,7 @@ export default function HomeScreen({ navigation }) { // Passen Sie die Navigatio
     }, []);
 
     const handleLikeRecipe = useCallback((recipe) => {
-        toggleLikeRecipe(recipe); // Funktion zum Hinzufügen oder Entfernen eines Rezepts aus den gelikten Rezepten
+        toggleLikeRecipe(recipe);
     }, [toggleLikeRecipe]);
 
     const filteredMeals = useMemo(() => {
@@ -81,7 +83,7 @@ export default function HomeScreen({ navigation }) { // Passen Sie die Navigatio
                 contentContainerStyle={{ paddingBottom: 50 }}
                 style={styles.scrollView}
             >
-                {/* Begrüßungstexte */}
+                {/* Greeting Text */}
                 <View style={styles.greetingText}>
                     <Text style={styles.greetingText}>Hello Julia!</Text>
                     <Text style={styles.mainText}>Find your Recipes here!</Text>
@@ -97,11 +99,9 @@ export default function HomeScreen({ navigation }) { // Passen Sie die Navigatio
                         onChangeText={handleSearch}
                         value={searchTerm}
                     />
-
-
                 </View>
 
-                {/* Kategorien */}
+                {/* Categories */}
                 <View style={{ marginTop: 20 }}>
                     {categories.length > 0 && (
                         <Categories
@@ -112,37 +112,16 @@ export default function HomeScreen({ navigation }) { // Passen Sie die Navigatio
                     )}
                 </View>
 
-                {/* Rezepte */}
-                <View>
-                    {isLoading ? (
-                        <ActivityIndicator size="large" />
-                    ) : (
-                        <Recipes meals={filteredMeals} />
-                    )}
-
-                </View>
-
-                {/* Rezepte anzeigen */}
+                {/* Recipes */}
                 <View>
                     {isLoading ? (
                         <ActivityIndicator size="large" />
                     ) : (
                         <Recipes
                             meals={filteredMeals}
-                            onLikeRecipe={handleLikeRecipe} // Funktion zum Liken oder Entliken eines Rezepts übergeben
+                            onLikeRecipe={handleLikeRecipe}
                         />
                     )}
-
-                </View>
-
-                {/* Liked Recipes Button */}
-                <View style={styles.likedRecipesButtonContainer}>
-                    <TouchableOpacity
-                        style={styles.likedRecipesButton}
-                        onPress={() => navigation.navigate('LikedRecipes')}
-                    >
-                        <Text style={styles.likedRecipesButtonText}>View Liked Recipes</Text>
-                    </TouchableOpacity>
                 </View>
             </ScrollView>
         </View>
