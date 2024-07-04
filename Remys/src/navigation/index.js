@@ -12,6 +12,8 @@ import LikedRecipesScreen from '../screens/LikedRecipesScreen';
 import WelcomeScreen from '../screens/WelcomeScreen';
 import CalendarScreen from '../screens/CalendarScreen'; // Importiere die Kalenderseite
 import { LikedRecipesProvider } from '../context/LikedRecipesContext';
+import CreateRecipeScreen from "../screens/CreateRecipeScreen";
+import CreatedRecipeDetailScreen from "../screens/CreatedRecipeDetailScreen";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -76,6 +78,16 @@ function DrawerNavigator() {
                     ),
                 }}
             />
+            <Drawer.Screen
+                name="Create Recipe"
+                component={CreateRecipeScreen}
+                options={{
+                    drawerLabel: 'Create Recipe',
+                    drawerIcon: ({ color, size }) => (
+                        <CalendarIcon color={color} size={size} /> // Use an appropriate icon
+                    ),
+                }}
+            />
         </Drawer.Navigator>
     );
 }
@@ -106,6 +118,17 @@ export default function App() {
                             },
                             headerTintColor: '#394e7d',
                             headerLeft: null,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="CreatedRecipeDetail"
+                        component={CreatedRecipeDetailScreen}
+                        options={{
+                            headerTitle: 'Recipe Details',
+                            headerStyle: {
+                                backgroundColor: '#dfecee',
+                            },
+                            headerTintColor: '#394e7d',
                         }}
                     />
                 </Stack.Navigator>
