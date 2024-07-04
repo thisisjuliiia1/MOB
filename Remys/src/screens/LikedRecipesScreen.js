@@ -6,8 +6,9 @@ import styles from './LikedRecipeStyles'; // Importieren Sie die Stile aus der s
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 
 const LikedRecipesScreen = () => {
-    const { likedRecipes } = useContext(LikedRecipesContext); // Zugriff auf den Context und die gelikten Rezepte
+    const { likedRecipes } = useContext(LikedRecipesContext);
     const navigation = useNavigation();
+
 
     return (
         <View style={styles.container}>

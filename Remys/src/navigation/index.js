@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+
 import { createStackNavigator } from '@react-navigation/stack';
-import { TouchableOpacity, View, Image } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { TouchableOpacity, Image } from 'react-native';
 import { HomeIcon, HeartIcon } from 'react-native-heroicons/mini';
-import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 
 import HomeScreen from '../screens/HomeScreen.js';
 import RecipeDetailScreen from '../screens/RecipeDetailScreen.js';
@@ -12,31 +12,16 @@ import LikedRecipesScreen from '../screens/LikedRecipesScreen.js';
 import WelcomeScreen from '../screens/WelcomeScreen.js'; // Adjust the path as per your project structure
 import { LikedRecipesProvider } from '../context/LikedRecipesContext'; // Adjust the path as per your project structure
 
+
 const Stack = createStackNavigator();
-const Drawer = createDrawerNavigator();
+const Tab = createBottomTabNavigator();
 
-// Custom Drawer Content Component
-function CustomDrawerContent(props) {
+// Komponente für die Bottom Tab Navigation mit Heroicons und Farben
+function HomeTabNavigator() {
     return (
-        <DrawerContentScrollView {...props} style={{ backgroundColor: '#dfecee' }}>
-            <View style={{ alignItems: 'center', marginBottom: 20 }}>
-                <Image
-                    source={require('../../assets/images/logo.png')} // Adjust the path to your logo
-                    style={{ width: 150, height: 50, resizeMode: 'contain' }}
-                />
-            </View>
-            <DrawerItemList {...props} />
-        </DrawerContentScrollView>
-    );
-}
-
-// Komponente für die Drawer Navigation
-function DrawerNavigator({ navigation }) {
-    return (
-        <Drawer.Navigator
-            drawerContent={props => <CustomDrawerContent {...props} />}
+        <Tab.Navigator
             screenOptions={({ route }) => ({
-                drawerIcon: ({ focused, color, size }) => {
+                tabBarIcon: ({ focused, color, size }) => {
                     let iconComponent;
 
                     if (route.name === 'Home') {
@@ -54,20 +39,15 @@ function DrawerNavigator({ navigation }) {
                         </TouchableOpacity>
                     );
                 },
-                drawerActiveTintColor: '#394e7d',
-                drawerInactiveTintColor: '#282221',
-                drawerStyle: {
-                    backgroundColor: '#dfecee', // Hintergrundfarbe des gesamten Drawers
-                },
-                headerStyle: {
-                    backgroundColor: '#394e7d', // Hintergrundfarbe des Headers für den Drawer
-                },
-                headerTintColor: '#dfecee', // Textfarbe des Headers
             })}
+            tabBarOptions={{
+                activeTintColor: '#394e7d',
+                inactiveTintColor: '#282221',
+            }}
         >
-            <Drawer.Screen name="Home" component={HomeScreen} />
-            <Drawer.Screen name="Liked Recipes" component={LikedRecipesScreen} />
-        </Drawer.Navigator>
+            <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+            <Tab.Screen name="Liked Recipes" component={LikedRecipesScreen} options={{ headerShown: false }} />
+        </Tab.Navigator>
     );
 }
 
@@ -76,33 +56,66 @@ export default function App() {
     return (
         <NavigationContainer>
             <LikedRecipesProvider>
-                <Stack.Navigator initialRouteName="Welcome">
-                    <Stack.Screen
-                        name="Welcome"
-                        component={WelcomeScreen}
-                        options={{
-                            headerShown: false, // Hide header for the Welcome screen
-                        }}
-                    />
-                    <Stack.Screen
-                        name="Home"
-                        component={DrawerNavigator}
-                        options={{
-                            headerShown: false, // Hide header for the Home screen
-                        }}
-                    />
-                    <Stack.Screen
-                        name="RecipeDetail"
-                        component={RecipeDetailScreen}
-                        options={{
-                            headerTitle: 'Recipe Details',
-                            headerStyle: {
-                                backgroundColor: '#dfecee', // Hintergrundfarbe des Headers
-                            },
-                            headerLeft: null, // Entfernt den "Back to Home" Button
-                        }}
-                    />
-                </Stack.Navigator>
+            <Stack.Navigator initialRouteName="Welcome">
+
+                <Stack.Screen
+                    name="Welcome"
+                    component={WelcomeScreen} // Replace with your Welcome screen component
+                    options={{
+                        headerShown: false, // Hide header for the Welcome screen
+                    }}
+                />
+
+                <Stack.Screen
+                    name="Home"
+                    component={HomeTabNavigator}
+                    options={{
+                        headerStyle: {
+                            backgroundColor: '#dfecee', // Hintergrundfarbe des Headers
+                        },
+                        headerTintColor: '#394e7d', // Textfarbe des Headers
+                        headerTitleStyle: {
+                            fontWeight: 'bold', // Stil für den Header-Titel
+                        },
+                        headerLeft: () => (
+                            <Image
+                                source={require('../../assets/images/logo.png')}
+                                style={{ width: 30, height: 30, marginLeft: 10 }}
+                            />
+                        ),
+                        tabBarLabel: 'Home', // Label für den Tab in der Bottom Navigation
+                    }}
+                />
+
+                <Stack.Screen
+                    name="Liked Recipes"
+                    component={LikedRecipesScreen}
+                    options={{
+                        headerTitle: 'Liked Recipes', // Titel des Headers
+                        headerStyle: {
+                            backgroundColor: '#dfecee', // Hintergrundfarbe des Headers
+                        },
+                        headerTintColor: '#394e7d', // Textfarbe des Headers
+                        headerTitleStyle: {
+                            fontWeight: 'bold', // Stil für den Header-Titel
+                        },
+                        tabBarLabel: 'Liked Recipes', // Label für den Tab in der Bottom Navigation
+                    }}
+                />
+
+                <Stack.Screen
+                    name="RecipeDetail"
+                    component={RecipeDetailScreen}
+                    options={{
+                        headerLeft: null, // Zurück-Button entfernen
+                        headerTitle: 'Recipe Details',
+                        headerStyle: {
+                            backgroundColor: '#dfecee', // Hintergrundfarbe des Headers
+                        },
+                    }}
+                />
+
+            </Stack.Navigator>
             </LikedRecipesProvider>
         </NavigationContainer>
     );

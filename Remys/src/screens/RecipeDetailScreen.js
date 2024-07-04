@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { CachedImage } from '../helpers/image';
@@ -13,12 +13,12 @@ import {
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import Loading from '../components/loading';
-import styles from './RecipeDetailStyles'; // Import the StyleSheet
+import styles from './RecipeDetailStyles';
+import { LikedRecipesContext } from "../context/LikedRecipesContext";
 
 const RecipeDetailScreen = (props) => {
     const { item } = props.route.params;
-    const [isFavourite, setIsFavourite] = useState(false);
-    const [likedRecipes, setLikedRecipes] = useState([]); // New state for liked recipes
+    const { likedRecipes, toggleLikeRecipe } = useContext(LikedRecipesContext);
     const navigation = useNavigation();
     const [meal, setMeal] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -27,11 +27,19 @@ const RecipeDetailScreen = (props) => {
         getMealData(item.idMeal);
     }, []);
 
+    useEffect(() => {
+        // Update isFavourite when likedRecipes changes
+        setIsFavourite(likedRecipes.some(recipe => recipe.idMeal === item.idMeal));
+    }, [likedRecipes]);
+
+    const [isFavourite, setIsFavourite] = useState(false);
+
     const getMealData = async (id) => {
         try {
             const response = await axios.get(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
             if (response && response.data && response.data.meals && response.data.meals.length > 0) {
                 setMeal(response.data.meals[0]);
+                setIsFavourite(likedRecipes.some(recipe => recipe.idMeal === id));
             } else {
                 console.error('No meal data found.');
             }
@@ -42,6 +50,9 @@ const RecipeDetailScreen = (props) => {
         }
     };
 
+    const handleToggleLike = () => {
+        toggleLikeRecipe(item);
+    };
 
     const renderIngredients = () => {
         if (!meal) return null; // Return early if meal is not loaded
@@ -91,7 +102,7 @@ const RecipeDetailScreen = (props) => {
                     <ChevronLeftIcon size={hp(4)} color="#394e7d" />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.iconButton} onPress={() => setIsFavourite(!isFavourite)}>
+                <TouchableOpacity style={styles.iconButton} onPress={handleToggleLike}>
                     <HeartIcon size={hp(4)} color={isFavourite ? 'red' : '#394e7d'} />
                 </TouchableOpacity>
             </View>
