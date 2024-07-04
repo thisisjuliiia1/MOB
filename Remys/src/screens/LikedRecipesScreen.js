@@ -2,8 +2,7 @@ import React, { useContext } from 'react';
 import { View, ScrollView, Text, TouchableOpacity, Image } from 'react-native';
 import { LikedRecipesContext } from '../context/LikedRecipesContext';
 import { useNavigation } from '@react-navigation/native';
-import styles from './LikedRecipeStyles'; // Importieren Sie die Stile aus der styles.js Datei
-import { widthPercentageToDP as wp } from "react-native-responsive-screen";
+import styles from './LikedRecipeStyles';
 
 const LikedRecipesScreen = () => {
     const { likedRecipes } = useContext(LikedRecipesContext);
@@ -17,7 +16,8 @@ const LikedRecipesScreen = () => {
                 contentContainerStyle={{ paddingBottom: 50 }}
                 style={styles.scrollView}
             >
-                <Text style={styles.header}>Liked Recipes</Text>
+                <Text style={styles.greetingText}>Hello Julia!</Text>
+                <Text style={styles.header}>Find your liked recipes here!</Text>
                 {likedRecipes.length === 0 ? (
                     <Text style={styles.noRecipesText}>You have not liked any recipes yet.</Text>
                 ) : (

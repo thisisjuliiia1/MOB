@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     },
 
     greetingText: {
-        marginLeft: 10,
+        marginLeft: 20,
         fontWeight: '400',
         color: '#282221',
         fontSize: wp('4%'),
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     },
     mainText: {
         fontWeight: '600',
-        marginLeft: 10,
+        marginLeft: 20,
         color: '#282221',
         fontSize: wp('6%'),
     },

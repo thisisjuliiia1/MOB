@@ -10,15 +10,23 @@ const styles = StyleSheet.create({
         paddingTop: 14,
     },
 
+    greetingText: {
+        marginLeft: 20,
+        fontWeight: '400',
+        color: '#282221',
+        fontSize: wp('4%'),
+        marginBottom: 10,
+    },
+
     header: {
         fontWeight: '600',
-        marginLeft: 10,
+        marginLeft: 20,
         color: '#282221',
         fontSize: wp('6%'),
         marginBottom: 10,
     },
     noRecipesText: {
-        fontSize: 18,
+        fontSize: wp('4%'),
         textAlign: 'center',
         marginVertical: 20,
     },
@@ -27,6 +35,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#f8f8f8',
         padding: 10,
+        margin: 20,
         borderRadius: 8,
         marginVertical: 8,
     },

@@ -84,7 +84,7 @@ export default function HomeScreen({ navigation }) {
                 style={styles.scrollView}
             >
                 {/* Greeting Text */}
-                <View style={styles.greetingText}>
+                <View>
                     <Text style={styles.greetingText}>Hello Julia!</Text>
                     <Text style={styles.mainText}>Find your Recipes here!</Text>
                 </View>
