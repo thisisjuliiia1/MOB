@@ -1,29 +1,28 @@
-import * as React from 'react';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Image } from 'react-native';
-import {HomeIcon, HeartIcon, CalendarIcon} from 'react-native-heroicons/mini';
+import { HomeIcon, HeartIcon, CalendarIcon, PlusIcon } from 'react-native-heroicons/mini';
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 
 import HomeScreen from '../screens/HomeScreen';
 import RecipeDetailScreen from '../screens/RecipeDetailScreen';
 import LikedRecipesScreen from '../screens/LikedRecipesScreen';
 import WelcomeScreen from '../screens/WelcomeScreen';
-import CalendarScreen from '../screens/CalendarScreen'; // Importiere die Kalenderseite
+import CalendarScreen from '../screens/CalendarScreen';
 import { LikedRecipesProvider } from '../context/LikedRecipesContext';
-import CreateRecipeScreen from "../screens/CreateRecipeScreen";
-import CreatedRecipeDetailScreen from "../screens/CreatedRecipeDetailScreen";
+import CreateRecipeScreen from '../screens/CreateRecipeScreen';
+import CreatedRecipeDetailScreen from '../screens/CreatedRecipeDetailScreen';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
-// Benutzerdefinierte Komponente für den Drawer-Inhalt
 function CustomDrawerContent(props) {
     return (
         <DrawerContentScrollView {...props} style={{ backgroundColor: '#dfecee' }}>
             <Image
-                source={require('../../assets/images/logo.png')} // Passe den Pfad zu deinem Logo an
+                source={require('../../assets/images/logo.png')}
                 style={{ width: 150, height: 50, resizeMode: 'contain', alignSelf: 'center', marginTop: 20 }}
             />
             <DrawerItemList {...props} />
@@ -31,20 +30,19 @@ function CustomDrawerContent(props) {
     );
 }
 
-// Komponente für die Drawer-Navigation
 function DrawerNavigator() {
     return (
         <Drawer.Navigator
             drawerContent={props => <CustomDrawerContent {...props} />}
             screenOptions={{
                 headerStyle: {
-                    backgroundColor: '#394e7d', // Hintergrundfarbe des Headers für den Drawer
+                    backgroundColor: '#394e7d',
                 },
-                headerTintColor: '#dfecee', // Textfarbe des Headers
-                drawerActiveTintColor: '#394e7d', // Aktive Textfarbe im Drawer
-                drawerInactiveTintColor: '#282221', // Inaktive Textfarbe im Drawer
+                headerTintColor: '#dfecee',
+                drawerActiveTintColor: '#394e7d',
+                drawerInactiveTintColor: '#282221',
                 drawerStyle: {
-                    backgroundColor: '#dfecee', // Hintergrundfarbe des gesamten Drawers
+                    backgroundColor: '#dfecee',
                 },
             }}
         >
@@ -59,7 +57,7 @@ function DrawerNavigator() {
                 }}
             />
             <Drawer.Screen
-                name="Liked Recipes"
+                name="LikedRecipes"
                 component={LikedRecipesScreen}
                 options={{
                     drawerLabel: 'Liked Recipes',
@@ -70,7 +68,7 @@ function DrawerNavigator() {
             />
             <Drawer.Screen
                 name="Calendar"
-                component={CalendarScreen} // Hier wird die Kalenderseite hinzugefügt
+                component={CalendarScreen}
                 options={{
                     drawerLabel: 'Calendar',
                     drawerIcon: ({ color, size }) => (
@@ -79,12 +77,12 @@ function DrawerNavigator() {
                 }}
             />
             <Drawer.Screen
-                name="Create Recipe"
+                name="CreateRecipe"
                 component={CreateRecipeScreen}
                 options={{
                     drawerLabel: 'Create Recipe',
                     drawerIcon: ({ color, size }) => (
-                        <CalendarIcon color={color} size={size} /> // Use an appropriate icon
+                        <PlusIcon color={color} size={size} />
                     ),
                 }}
             />
@@ -92,7 +90,6 @@ function DrawerNavigator() {
     );
 }
 
-// Haupt-App-Komponente, die die gesamte Navigation enthält
 export default function App() {
     return (
         <NavigationContainer>
@@ -121,6 +118,17 @@ export default function App() {
                         }}
                     />
                     <Stack.Screen
+                        name="Calendar"
+                        component={CalendarScreen}
+                        options={{
+                            headerTitle: 'Calendar',
+                            headerStyle: {
+                                backgroundColor: '#dfecee',
+                            },
+                            headerTintColor: '#394e7d',
+                        }}
+                    />
+                    <Stack.Screen
                         name="CreatedRecipeDetail"
                         component={CreatedRecipeDetailScreen}
                         options={{
@@ -129,6 +137,7 @@ export default function App() {
                                 backgroundColor: '#dfecee',
                             },
                             headerTintColor: '#394e7d',
+                            headerLeft: null,
                         }}
                     />
                 </Stack.Navigator>

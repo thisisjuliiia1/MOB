@@ -6,12 +6,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#dfecee',
         padding: 20
     },
-    header: {
-        textAlign: 'center',
-        fontSize: 20,
-        color: '#282221',
-        marginVertical: 10
-    },
     picker: {
         height: 50,
         width: 200,
@@ -87,6 +81,9 @@ const styles = StyleSheet.create({
         color: '#fff',
         marginLeft: 5,
         fontSize: 16
+    },
+    flatListContent: {
+        paddingBottom: 20 // ensure there's some padding at the bottom of the list
     }
 });
 

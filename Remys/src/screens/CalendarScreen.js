@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Modal, FlatList, Image, ActivityIndicator } from 'react-native';
+import { View, TouchableOpacity, Modal, FlatList, Image, ActivityIndicator, Text } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import axios from 'axios';
 import { Picker } from '@react-native-picker/picker';
@@ -82,7 +82,6 @@ const CalendarScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>Calendar Screen</Text>
             <Picker
                 selectedValue={selectedCategory}
                 style={styles.picker}
@@ -144,6 +143,7 @@ const CalendarScreen = ({ navigation }) => {
                                     <Text style={styles.recipeText}>{item.strMeal}</Text>
                                 </TouchableOpacity>
                             )}
+                            contentContainerStyle={styles.flatListContent}
                         />
                     )}
                     <TouchableOpacity style={styles.closeButton} onPress={() => setIsModalVisible(false)}>

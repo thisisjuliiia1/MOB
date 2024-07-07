@@ -8,6 +8,13 @@ const LikedRecipesScreen = () => {
     const { likedRecipes } = useContext(LikedRecipesContext);
     const navigation = useNavigation();
 
+    const handlePress = (recipe) => {
+        if (recipe.isCustom) {
+            navigation.navigate('CreatedRecipeDetail', { item: recipe });
+        } else {
+            navigation.navigate('RecipeDetail', { item: recipe });
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -25,7 +32,7 @@ const LikedRecipesScreen = () => {
                         <TouchableOpacity
                             key={recipe.idMeal}
                             style={styles.recipeCard}
-                            onPress={() => navigation.navigate('RecipeDetail', { item: recipe })}
+                            onPress={() => handlePress(recipe)}
                         >
                             <Image source={{ uri: recipe.strMealThumb }} style={styles.image} />
                             <Text style={styles.title}>{recipe.strMeal}</Text>
