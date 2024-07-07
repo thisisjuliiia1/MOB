@@ -1,8 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import { HeartIcon, ChevronLeftIcon } from 'react-native-heroicons/mini';
-import { LikedRecipesContext } from '../context/LikedRecipesContext';
-import styles from './RecipeDetailStyles'; // Use the existing styles for consistency
+import React, {useContext, useEffect, useState} from 'react';
+import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {
+    ChevronLeftIcon,
+    ClockIcon,
+    FireIcon,
+    HeartIcon,
+    Square3Stack3DIcon,
+    UsersIcon
+} from 'react-native-heroicons/mini';
+import {LikedRecipesContext} from '../context/LikedRecipesContext';
+import styles from './CreateRecipeDetailStyles'; // Use the existing styles for consistency
 
 const CreatedRecipeDetailScreen = ({ route, navigation }) => {
     const { item } = route.params;
@@ -20,14 +27,23 @@ const CreatedRecipeDetailScreen = ({ route, navigation }) => {
     const renderIngredients = () => {
         if (!item.strIngredient1) return null;
 
-        const ingredients = item.strIngredient1.split(',').map((ingredient, index) => (
+        return item.strIngredient1.split(',').map((ingredient, index) => (
             <View key={index} style={styles.ingredientItem}>
-                <View style={styles.bulletPoint} />
+                <View style={styles.bulletPoint}/>
                 <Text style={styles.ingredientText}>{ingredient.trim()}</Text>
             </View>
         ));
+    };
 
-        return ingredients;
+    const renderInstructions = () => {
+        if (!item.strInstructions) return null;
+
+        const instructions = item.strInstructions.split('\n');
+        return instructions.map((instruction, index) => (
+            <Text key={index} style={styles.instructionItem}>
+                {instruction}
+            </Text>
+        ));
     };
 
     return (
@@ -48,17 +64,42 @@ const CreatedRecipeDetailScreen = ({ route, navigation }) => {
 
             <View style={styles.content}>
                 <Text style={styles.mealName}>{item.strMeal}</Text>
-                <Text style={styles.area}>{item.strDifficulty}</Text>
 
                 <View style={styles.miscContainer}>
                     <View style={styles.miscItem}>
-                        <Text style={styles.miscText}>Duration: {item.strDuration} mins</Text>
+                        <View style={styles.iconBackground}>
+                            <ClockIcon size={24} color="#394e7d" />
+                        </View>
+                        <View style={styles.textContainer}>
+                            <Text style={styles.miscText}>{item.strDuration}</Text>
+                            <Text style={styles.miscUnit}>Mins</Text>
+                        </View>
                     </View>
                     <View style={styles.miscItem}>
-                        <Text style={styles.miscText}>Servings: {item.strServings}</Text>
+                        <View style={styles.iconBackground}>
+                            <UsersIcon size={24} color="#394e7d" />
+                        </View>
+                        <View style={styles.textContainer}>
+                            <Text style={styles.miscText}>{item.strServings}</Text>
+                            <Text style={styles.miscUnit}>Servings</Text>
+                        </View>
                     </View>
                     <View style={styles.miscItem}>
-                        <Text style={styles.miscText}>Calories: {item.strCalories}</Text>
+                        <View style={styles.iconBackground}>
+                            <FireIcon size={24} color="#394e7d" />
+                        </View>
+                        <View style={styles.textContainer}>
+                            <Text style={styles.miscText}>{item.strCalories}</Text>
+                            <Text style={styles.miscUnit}>Calories</Text>
+                        </View>
+                    </View>
+                    <View style={styles.miscItem}>
+                        <View style={styles.iconBackground}>
+                            <Square3Stack3DIcon size={24} color="#394e7d" />
+                        </View>
+                        <View style={styles.textContainer}>
+                            <Text style={styles.miscText}>{item.strDifficulty}</Text>
+                        </View>
                     </View>
                 </View>
 
@@ -69,7 +110,7 @@ const CreatedRecipeDetailScreen = ({ route, navigation }) => {
 
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Instructions</Text>
-                    <Text style={styles.instructionItem}>{item.strInstructions}</Text>
+                    {renderInstructions()}
                 </View>
             </View>
         </ScrollView>
