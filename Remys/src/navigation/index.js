@@ -130,7 +130,7 @@ export default function App() {
                     />
                     <Stack.Screen
                         name="CreatedRecipeDetail"
-                        component={CreatedRecipeDetailScreen}
+                        component={CreatedRecipeDetailScreen} // Hier muss der Name übereinstimmen
                         options={{
                             headerTitle: 'Recipe Details',
                             headerStyle: {

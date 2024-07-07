@@ -164,7 +164,7 @@ export default function CreateRecipeScreen() {
                         <View style={styles.recipeCard}>
                             <TouchableOpacity
                                 style={styles.recipeCardContent}
-                                onPress={() => navigation.navigate('CreatedRecipeDetailScreen', { item })}
+                                onPress={() => navigation.navigate('CreatedRecipeDetail', { item })} // Update this line
                             >
                                 <Text style={styles.recipeTitle}>{item.strMeal}</Text>
                             </TouchableOpacity>
