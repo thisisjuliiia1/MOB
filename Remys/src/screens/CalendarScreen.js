@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Modal, FlatList, Image, ActivityIndicator } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import axios from 'axios';
-import { Picker } from '@react-native-picker/picker';
 import { PlusIcon, TrashIcon } from 'react-native-heroicons/solid';
 import styles from './CalendarStyles';
 
@@ -11,11 +10,8 @@ const CalendarScreen = ({ navigation }) => {
     const [markedDates, setMarkedDates] = useState({});
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedDate, setSelectedDate] = useState(null);
-    const [categories, setCategories] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState('Beef');
     const [recipesForDate, setRecipesForDate] = useState({});
     const [isLoading, setIsLoading] = useState(false);
-
 
     const loadRecipesForDate = async (date) => {
         setSelectedDate(date.dateString);
@@ -73,15 +69,6 @@ const CalendarScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Picker
-                selectedValue={selectedCategory}
-                style={styles.picker}
-                onValueChange={itemValue => setSelectedCategory(itemValue)}
-            >
-                {categories.map(category => (
-                    <Picker.Item key={category.idCategory} label={category.strCategory} value={category.strCategory} />
-                ))}
-            </Picker>
             <Calendar
                 onDayPress={onDayPress}
                 markedDates={markedDates}
