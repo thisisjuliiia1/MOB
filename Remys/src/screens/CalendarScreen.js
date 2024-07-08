@@ -82,7 +82,6 @@ const CalendarScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>Calendar Screen</Text>
             <Picker
                 selectedValue={selectedCategory}
                 style={styles.picker}
