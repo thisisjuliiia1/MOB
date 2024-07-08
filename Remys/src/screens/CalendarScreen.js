@@ -16,15 +16,6 @@ const CalendarScreen = ({ navigation }) => {
     const [recipesForDate, setRecipesForDate] = useState({});
     const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(() => {
-        axios.get('https://www.themealdb.com/api/json/v1/1/categories.php')
-            .then(response => {
-                if (response.data && response.data.categories) {
-                    setCategories(response.data.categories);
-                }
-            })
-            .catch(error => console.error('Error loading categories:', error));
-    }, []);
 
     const loadRecipesForDate = async (date) => {
         setSelectedDate(date.dateString);
